@@ -242,6 +242,7 @@ let index = 1
 
 
 let overBook = false;
+let infoSeen = false;
 
 const coverStyle =  document.querySelector(".cover").style;
 const backCoverStyle = document.querySelector(".backCover").style;
@@ -268,6 +269,20 @@ window.addEventListener("mouseup", (event) => {
             scene.remove(closeBook.model());
             coverStyle.zIndex = 0;
            },500)
+
+
+           setTimeout(()=>{
+            document.querySelector('.info').style.top = '25%'
+            document.querySelector('.info').style.right = '-10%'
+            document.querySelector('.iText').textContent = 'Flip the pages'
+            if(infoSeen == false){
+            document.querySelector('.info').style.visibility = 'visible'
+            }
+            setTimeout(()=>{
+                document.querySelector('.info').style.visibility = 'hidden';
+                infoSeen = true;
+            },4000)
+           },4000)
         }
         if(overBook){
         OpenBook()
@@ -294,7 +309,8 @@ function moveToBook(){
        element.textContent = ""
     });
       gsap.to(camera.position, {x:1.7646984053122199,y: 0.23614540642467852,z:1.609414118823052, duration:3})    
-   }
+      document.querySelector('.info').style.visibility = 'hidden'
+    }
  
 //#region Animation Loop
 const loop = () => {
@@ -306,42 +322,10 @@ loop();
 //#endregion
 
 
-//#region dev tools
-
-window.addEventListener('keypress', (e)=>{
-    if(e.key == "c"){
-        console.log(camera.position)
+setTimeout(()=>{
+    if(overBook == false){
+        document.querySelector('.iText').textContent = 'Click On the Book'
+        document.querySelector('.info').style.visibility = 'visible'
     }
-})
-//#end region
+},5000)
 
-
-
-
-
-// loader.load( 'model.glb', function ( gltf ) {
-
-//     const box = new THREE.Box3().setFromObject(gltf.scene);
-//  const center = box.getCenter(new THREE.Vector3());
-
-//  // Calculate the maximum dimension of the bounding box
-//  const size = box.getSize(new THREE.Vector3());
-//  const maxDimension = Math.max(size.x, size.y, size.z);
-
-//  // Set the desired scale factor
-//  const scaleFactor = 2.25 / maxDimension;
-
-//  // Scale the model
-//  gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-//  // Center the model
-//  const newCenter = center.clone().multiplyScalar(scaleFactor);
-
-//  // Adjust the position to center the model
-//  gltf.scene.position.sub(newCenter);
-
-//  scene.add(gltf.scene);
-// }, undefined, function ( error ) {
-
-//  console.error( error );
-// } );
