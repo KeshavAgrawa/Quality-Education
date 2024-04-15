@@ -52,7 +52,7 @@ const canvas = document.querySelector('.webgl');
 var renderer = new THREE.WebGLRenderer({
 	canvas: canvas,
 	antialias: true,
-	alpha: true // NOTE: only this is important for a clear background!!!
+	alpha: true 
 });
 renderer.toneMapping = THREE.NeutralToneMapping;
 renderer.setSize(size.width, size.height);
@@ -64,10 +64,7 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.target = bookCords;
 controls.enableRotate = false
-// controls.enableZoom = false
-// controls.enablePan = false
-// controls.maxPolarAngle = Math.PI/2 * 0.96
-// //#endregion
+
 
 
 let centerX = window.innerWidth / 2;
@@ -139,7 +136,7 @@ loader.load( 'scene1.glb', function ( gltf ) {
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const center = box.getCenter(new THREE.Vector3());
 
-    // Corrected centering logic
+    
    model.position.x -= center.x;
    model.position.y -= center.y;
    model.position.z -= center.z;
@@ -170,6 +167,7 @@ let index = 1
     let element = {}
 
     elem.addEventListener("mousedown", (e)=> {
+        if(coverStyle.zIndex == '0'){
         if(mousePressed == false){
         element = {
             page: ()=>{
@@ -189,7 +187,7 @@ let index = 1
         rotateDeg = 0
 
         
-    });
+    }});
 
     elem.addEventListener("mousemove", (e)=> {
         if(mousePressed){
@@ -214,7 +212,7 @@ let index = 1
     })
 
     window.addEventListener("mouseup", ()=> {
-
+    if(mousePressed){
         if(rotateDeg < -90){
             element.page().style.transform = `rotateX(10deg) rotateY(-180deg) `;
             
@@ -237,7 +235,7 @@ let index = 1
             img.style.transform = `translateX(0px)`
         })
         
-});
+}});
 })
 
 
@@ -263,13 +261,15 @@ window.addEventListener("mouseup", (event) => {
             
            divBook.style.visibility = "visible"
             bookVisible = true
-
+           if(infoSeen == false){
            coverStyle.transform = "rotateX(10deg) rotateY(-180deg)"
            setTimeout(()=>{
             scene.remove(closeBook.model());
             coverStyle.zIndex = 0;
            },500)
-
+   
+        }
+           
 
            setTimeout(()=>{
             document.querySelector('.info').style.top = '25%'
@@ -328,4 +328,20 @@ setTimeout(()=>{
         document.querySelector('.info').style.visibility = 'visible'
     }
 },5000)
+
+document.querySelector('.goToStart').addEventListener('click',()=>{
+      pages.forEach(function(page){
+        page.style.zIndex = 1;
+        page.style.transform = 'rotateX(10deg) rotateY(0deg)';
+        coverStyle.zIndex = 2;
+        coverStyle.transform = 'rotateX(10deg) rotateY(0deg)';
+        document.querySelector('.readAgain').style.visibility = 'visible'
+      })
+})
+
+document.querySelector('.readAgain').addEventListener('click',()=>{
+        coverStyle.zIndex = 0;
+        coverStyle.transform = 'rotateX(10deg) rotateY(-180deg)';
+        document.querySelector('.readAgain').style.visibility = 'hidden'
+})
 
